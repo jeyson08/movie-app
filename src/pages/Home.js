@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../components/Header";
 import axios from "axios";
 import Card from "../components/Card";
 
 const Home = () => {
-  const inputsearch = document.querySelector("#inputsearch");
+  const inputRef = useRef(null);
   const [moviesData, setMoviesData] = useState([]);
   const [search, setSearch] = useState("le seigneur");
   // const [page, setPage] = useState(1);
@@ -18,6 +18,17 @@ const Home = () => {
       .then((res) => setMoviesData(res.data.results));
   }, [search]);
 
+  const sortMovies = (order) => {
+    const sortedMovies = [...moviesData].sort((a, b) => {
+      if (order === "top") {
+        return b.vote_average - a.vote_average;
+      } else {
+        return a.vote_average - b.vote_average;
+      }
+    });
+    setMoviesData(sortedMovies);
+  };
+
   return (
     <div className="home">
       <Header />
@@ -27,16 +38,21 @@ const Home = () => {
           name="inputsearch"
           id="inputsearch"
           onChange={(e) => setSearch(e.target.value)}
+          ref={inputRef}
         />
         <input
           type="submit"
           value="Rechercher"
           onClick={(e) => {
             e.preventDefault();
-            setSearch(inputsearch.value);
-            inputsearch.value = "";
+            setSearch(inputRef.current.value);
+            inputRef.current.value = "";
           }}
         />
+        <div className="buttons">
+          <button onClick={() => sortMovies("top")}>top</button>
+          <button onClick={() => sortMovies("flop")}>flop</button>
+        </div>
       </div>
       <ul className="card-container">
         {moviesData &&
