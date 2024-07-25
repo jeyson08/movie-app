@@ -18,14 +18,27 @@ const Card = ({ film }) => {
     return genre ? genre.name : "Unknown";
   }
 
+  const dateFormater = (date) => {
+    let newDate = new Date(date).toLocaleDateString("fr-FR", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+    return newDate;
+  };
+
   return (
     <div className="card">
       <img
-        src={"https://image.tmdb.org/t/p/original/" + film.poster_path}
+        src={
+          film.poster_path !== null
+            ? "https://image.tmdb.org/t/p/original/" + film.poster_path
+            : process.env.PUBLIC_URL + "/img/poster.jpg"
+        }
         alt={film.title}
       />
       <h1>{film.title}</h1>
-      <p className="sortie">Sorti le : {film.release_date}</p>
+      <p className="sortie">Sorti le : {dateFormater(film.release_date)}</p>
       <p className="note">{Math.round(film.vote_average * 10) / 10} / 10 ⭐️</p>
       <ul className="genre">
         {ids.map((id) => (
