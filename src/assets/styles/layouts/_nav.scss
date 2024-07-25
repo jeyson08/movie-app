@@ -1,0 +1,19 @@
+nav {
+  width: 45%;
+  color: white;
+  ul {
+    display: flex;
+
+    a {
+      padding: 1% 5%;
+      font-size: 0.8rem;
+
+      &.nav-active {
+        background: #546fe4;
+        border-radius: 20px;
+        li {
+        }
+      }
+    }
+  }
+}
